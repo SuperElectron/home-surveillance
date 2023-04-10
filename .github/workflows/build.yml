@@ -34,10 +34,10 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 server --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
           echo $Python3_ROOT_DIR
+      - name: set pythonpath
+        run: |
+          echo "PYTHONPATH=server" >> $GITHUB_ENV
       - name: Test with pytest
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
         run: |
           pwd
           ls -al 
