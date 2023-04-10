@@ -35,7 +35,7 @@ jobs:
           flake8 server --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
           echo $Python3_ROOT_DIR
       - name: Test with pytest
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.10"
         run: |
