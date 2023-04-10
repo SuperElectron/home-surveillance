@@ -1,0 +1,9 @@
+uvicorn
+pymongo
+python-dotenv
+gunicorn
+fastapi
+starlette
+httpx
+pydantic
+loguru
