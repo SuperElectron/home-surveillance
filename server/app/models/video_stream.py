@@ -10,13 +10,15 @@ class Endpoint(BaseModel):
     rtmpUrl: str
     endpointServiceId: str
 
+
 class PlayListItem(BaseModel):
     streamUrl: str
     type: str
 
+
 class VideoStream(BaseModel):
     streamId: str
-    status: str 
+    status: str
     name: str
     publishType: str
     type: str
@@ -24,10 +26,10 @@ class VideoStream(BaseModel):
     date: Optional[int]
     plannedStartDate: int
     plannedEndDate: int
-    duration: int 
+    duration: int
     endPointList: List[Endpoint]
     playListItemList: List[PlayListItem]
-    publicStream: bool 
+    publicStream: bool
     is360: bool
     listenerHookURL: str
     category: str
@@ -55,7 +57,7 @@ class VideoStream(BaseModel):
     latitude: str
     longitude: str
     altitude: str
-    mainTrackStreamId: str 
+    mainTrackStreamId: str
     subTrackStreamIds: List[str]
     absoluteStartTimeMs: int
     webRTCViewerLimit: int
@@ -66,17 +68,15 @@ class VideoStream(BaseModel):
     metaData: str
     playlistLoopEnabled: bool
     updateTime: int
-    
 
     @validator("date")
     def set_date(cls, _: int):
         return int(datetime.utcnow().strftime("%Y%m%d"))
 
 
-class VideoStreamRequest(BaseModel): 
+class VideoStreamRequest(BaseModel):
     video_stream: VideoStream
+
 
 class VideoStreamResponse(BaseModel):
     video_stream: VideoStream
-
-

@@ -12,13 +12,13 @@ ENV MongoDBConn="mongodb://${MongoDBUsername}:${MongoDBPassword}@${MongoDBServer
 
 ARG BranchName=master
 
-#Running update and install makes the builder not to use cache which resolves some updates
+#Running update and setup makes the builder not to use cache which resolves some updates
 RUN --mount=type=cache,target=/var/cache/apt apt-get update -yqq  \
     && apt-get install -yqq curl libcap2 wget net-tools iproute2 cron logrotate unzip iptables
 
 RUN cd /home && wget $AntMediaServer
 
-# install AMS from zip file
+# setup AMS from zip file
 RUN cd home \
     && pwd \
     && wget https://raw.githubusercontent.com/ant-media/Scripts/${BranchName}/install_ant-media-server.sh \

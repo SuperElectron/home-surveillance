@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Example usage: ./install.sh
+# Example usage: ./setup.sh
 
 export WORKDIR="/start"
 export NAME="[install.sh]: "
@@ -26,10 +26,10 @@ else
 fi
 
 apt-get update -y && \
-apt-get install -y -qq \
+apt-get setup -y -qq \
     python3-pip wget
 
-python3 -m pip install -r /start/requirements.txt
+python3 -m pip setup -r /start/requirements.txt
 
 
 wget https://github.com/intel-iot-devkit/sample-videos/raw/master/person-bicycle-car-detection.mp4 -O /start/sample.mp4

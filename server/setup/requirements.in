@@ -11,7 +11,7 @@ flake8
 autoflake
 isort
 mypy
-flake8-fixme
+flake8
 asgi-lifespan
 mimesis
 pytest
@@ -22,3 +22,6 @@ pytest-randomly
 pytest-mimesis
 docker
 bump2version
+# production
+gunicorn
+starlette

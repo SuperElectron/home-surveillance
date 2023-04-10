@@ -19,15 +19,17 @@ USE_LOCAL_MONGO: bool = getenv("USE_LOCAL_MONGO", False)
 
 pytest_plugins = ["tests.common.fixtures_stream"]
 
+
 @pytest.fixture(scope="session")
 def docker() -> libdocker.APIClient:
     with libdocker.APIClient(version="auto") as client:
         yield client
 
+
 @pytest.fixture(scope="session", autouse=True)
-def mongo_server(docker: libdocker.APIClient) -> None: 
-    if USE_LOCAL_MONGO is not False: 
-        host_config = docker.create_host_config(port_bindings = {27017:27017})
+def mongo_server(docker: libdocker.APIClient) -> None:
+    if USE_LOCAL_MONGO is not False:
+        host_config = docker.create_host_config(port_bindings={27017: 27017})
         container = docker.create_container(
             image=MONGO_DOCKER_IMAGE,
             name=MONGO_DOCKER_CONTAINER_NAME,
@@ -40,7 +42,7 @@ def mongo_server(docker: libdocker.APIClient) -> None:
         docker.start(container=container["Id"])
         inspection = docker.inspect_container(container["Id"])
         host = inspection["NetworkSettings"]["IPAddress"]
-        
+
         environ["DB_HOST"] = host
         environ["DB_USER"] = "root"
         environ["DB_PASSWORD"] = "admin"
@@ -53,6 +55,7 @@ def mongo_server(docker: libdocker.APIClient) -> None:
     else:
         yield
         return
+
 
 # @pytest.fixture(scope="session", autouse=True)
 # def ant_server(docker: libdocker.APIClient) -> None:
@@ -88,6 +91,7 @@ def app() -> FastAPI:
 
     return get_application()
 
+
 @pytest_asyncio.fixture
 async def initialized_app(app: FastAPI):
     async with LifespanManager(app):
@@ -97,15 +101,17 @@ async def initialized_app(app: FastAPI):
 @pytest_asyncio.fixture
 async def client(initialized_app: FastAPI):
     async with AsyncClient(
-        app=initialized_app,
-        base_url="http://testserver",
-        headers={"Content-Type": "application/json"},
+            app=initialized_app,
+            base_url="http://testserver",
+            headers={"Content-Type": "application/json"},
     ) as client:
         yield client
 
-@pytest.fxture
+
+@pytest.fixture
 def db(initialized_app: FastAPI) -> Database:
-    return initialized_app.state.db 
+    return initialized_app.state.db
+
 
 @pytest.fixture
 def random_generator() -> Random:

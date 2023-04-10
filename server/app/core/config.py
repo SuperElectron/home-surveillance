@@ -10,10 +10,10 @@ from app.core.logging import InterceptHandler
 config = Config(".env")
 
 # API Prefix
-API_PREFIX: str  = config("API_PREFIX", default="/api/v1")
+API_PREFIX: str = config("API_PREFIX", default="/api/v1")
 
 # API Version
-VERSION: str = config("VERSION", default="1.0.0") 
+VERSION: str = config("VERSION", default="1.0.0")
 
 # Application Settings
 DEBUG: bool = config("DEBUG", cast=bool, default=False)
@@ -34,7 +34,7 @@ DB_NAME: str = config("DB_NAME", default="backup_db")
 # Logging Settings 
 
 LOGGING_LEVEL: int = logging.DEBUG if DEBUG else logging.INFO
-LOGGERS: Tuple[str, str] =  ("uvicorn.asgi", "uvicorn.acces")
+LOGGERS: Tuple[str, str] = ("uvicorn.asgi", "uvicorn.acces")
 
 logging.getLogger().handlers = [InterceptHandler()]
 

@@ -10,12 +10,12 @@ EXPOSE 22 2181 2888 3888 9200
 RUN export PATH=$JAVA_HOME/bin:$PATH
 RUN rm -f /etc/apt/apt.conf.d/docker-clean
 
-# Download, install, and set up zk-kafka
+# Download, setup, and set up zk-kafka
 COPY apt /start/apt
 COPY configs /start/configs
 COPY scripts /start/scripts
 RUN chmod 775 /start -R
-# install apt packages
+# setup apt packages
 RUN --mount=type=cache,target=/var/cache/apt apt-get update -yqq && \
     apt-get install -yqq --no-install-recommends \
     $(cat /start/apt/general.apt) \

@@ -1,10 +1,10 @@
-
 from loguru import logger
 from fastapi import FastAPI
-from pymongo import MongoClient 
+from pymongo import MongoClient
 
 from app.core.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER
 from app.utils.sync import run_in_thread
+
 
 async def connect_to_db(app: FastAPI) -> None:
     logger.info(
@@ -25,6 +25,7 @@ async def connect_to_db(app: FastAPI) -> None:
     app.state.client = client
 
     logger.info("Connection established.")
+
 
 async def close_db_connection(app: FastAPI) -> None:
     logger.info("Closing connection to database.")

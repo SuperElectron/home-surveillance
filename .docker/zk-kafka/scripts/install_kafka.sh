@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Example usage: ./install.sh
+# Example usage: ./setup.sh
 
 export WORKDIR="/start"
 export NAME="[install.sh]: "

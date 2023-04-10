@@ -25,7 +25,7 @@ else
 fi
 
 apt-get update -y && \
-apt-get install -y -qq \
+apt-get setup -y -qq \
     git \
     libgirepository1.0-dev \
     python3-gst-1.0 \

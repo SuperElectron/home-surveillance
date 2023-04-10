@@ -1,9 +1,7 @@
 from app.models.backup import Backup
 
 
-class BackupService: 
+class BackupService:
 
     def get_backup(backup: Backup):
         pass
-
-    
