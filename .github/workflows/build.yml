@@ -36,6 +36,5 @@ jobs:
           echo $Python3_ROOT_DIR
       - name: Test with pytest
         run: |
-          echo "PYTHONPATH=$(pwd)/server" >> $GITHUB_ENV
-          echo $GITHUB_ENV
-          cd server && pytest --fixtures tests
+          pytest --fixtures tests
+        working-directory: server
