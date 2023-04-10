@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
 
-
+## test stream: gst-launch-1.0 -v videotestsrc ! x264enc ! flvmux ! rtmpsink location='rtmp://172.23.0.2/WebRTCApp/test-101 live=1'
   ant:
     container_name: ant
     restart: unless-stopped
@@ -21,9 +21,13 @@ services:
       - ant-data:/usr/local/antmedia
     ports:
       - 5080:5080
-#    depends_on:
-#      - kafka
-#
+    depends_on:
+      - kafka
+      - grafana
+      - logstash
+      - elasticsearch
+      - mongo
+
 #  gstreamer:
 #    container_name: gstreamer
 #    restart: unless-stopped
@@ -62,6 +66,63 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+  logstash:
+    container_name: logstash
+    restart: unless-stopped
+    image: docker.elastic.co/logstash/logstash:7.17.8
+    networks:
+      cloud_manager:
+        ipv4_address: 172.23.0.8
+    volumes:
+      - ./.docker/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - kafka
+      - elasticsearch
+
+  elasticsearch:
+    container_name: elasticsearch
+    restart: unless-stopped
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
+    networks:
+      cloud_manager:
+        ipv4_address: 172.23.0.9
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  grafana:
+    container_name: grafana
+    restart: unless-stopped
+    image: grafana/grafana-oss:latest
+    networks:
+      cloud_manager:
+        ipv4_address: 172.23.0.10
+    ports:
+      - 3000:3000
+    depends_on:
+      - logstash
+      - elasticsearch
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+# used for development testing: topics=[ams-instance-stats, camera-<id>-warning]
+## docker exec -it kafkacat kafkacat -b 172.23.0.7:9092 -L
+## docker exec -it kafkacat kafkacat -b 172.23.0.7:9092 -t <topic> -C
+## docker exec -it kafkacat kafkacat -b 172.23.0.7:9092 -t <topic> -P
   kafkacat:
     container_name: kafkacat
     restart: unless-stopped
@@ -72,71 +133,19 @@ services:
         ipv4_address: 172.23.0.16
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-#  logstash:
-#    container_name: logstash
-#    restart: unless-stopped
-#    image: docker.elastic.co/logstash/logstash:7.17.8
-#    networks:
-#      cloud_manager:
-#        ipv4_address: 172.23.0.8
-#    volumes:
-#      - ./.docker/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-#    depends_on:
-#      - kafka
-#      - elasticsearch
-#
-#  elasticsearch:
-#    container_name: elasticsearch
-#    restart: unless-stopped
-#    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
-#    networks:
-#      cloud_manager:
-#        ipv4_address: 172.23.0.9
-#    environment:
-#      - xpack.security.enabled=false
-#      - discovery.type=single-node
-#    ulimits:
-#      memlock:
-#        soft: -1
-#        hard: -1
-#      nofile:
-#        soft: 65536
-#        hard: 65536
-#    cap_add:
-#      - IPC_LOCK
-#    volumes:
-#      - elasticsearch-data:/usr/share/elasticsearch/data
-#    ports:
-#      - 9200:9200
-#      - 9300:9300
-#
-#  grafana:
-#    container_name: grafana
-#    restart: unless-stopped
-#    image: grafana/grafana-oss:latest
-#    networks:
-#      cloud_manager:
-#        ipv4_address: 172.23.0.10
-#    ports:
-#      - 3000:3000
-#    depends_on:
-#      - logstash
-#    volumes:
-#      - grafana-data:/var/lib/grafana
 
-#
-#  server:
-#    container_name: server
-#    image: server:latest
-#    networks:
-#      cloud_manager:
-#        ipv4_address: 172.23.0.11
-#    ports:
-#      - 5000:5000
-#    depends_on:
-#      - ant
-#      - mongo
-#
+  server:
+    container_name: server
+    build: server
+    networks:
+      cloud_manager:
+        ipv4_address: 172.23.0.11
+    ports:
+      - 5000:5000
+    depends_on:
+      - ant
+      - mongo
+
 
 networks:
   cloud_manager:

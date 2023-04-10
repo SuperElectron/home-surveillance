@@ -4,7 +4,10 @@ RUN mkdir /server
 WORKDIR /server
 EXPOSE 5000
 
-COPY main.py README.md requirements-prod.txt .env ./
+COPY main.py .
+COPY requirements-prod.txt .
+COPY .env.example ./.env
+
 COPY app/ ./app
 RUN pip install -r requirements-prod.txt
 
