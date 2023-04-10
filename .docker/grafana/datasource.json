@@ -1,0 +1,22 @@
+{
+  "id": 1,
+  "orgId": 1,
+  "name": "Elasticsearch",
+  "type": "elasticsearch",
+  "typeLogoUrl": "public/app/plugins/datasource/elasticsearch/img/elasticsearch.svg",
+  "access": "proxy",
+  "url": "http://172.23.0.9:9200",
+  "password": "",
+  "user": "",
+  "database": "logstash-*",
+  "basicAuth": false,
+  "isDefault": true,
+  "jsonData": {
+    "esVersion": 71,
+    "logLevelField": "",
+    "logMessageField": "",
+    "maxConcurrentShardRequests": 5,
+    "timeField": "@timestamp"
+  },
+  "readOnly": false
+}
