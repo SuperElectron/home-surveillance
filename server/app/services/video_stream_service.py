@@ -1,4 +1,3 @@
-from pprint import pprint
 from typing import Union
 from httpx import AsyncClient
 from httpx import HTTPStatusError, TimeoutException, HTTPError

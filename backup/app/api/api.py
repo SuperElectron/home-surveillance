@@ -1,4 +1,3 @@
-from uuid import UUID
 import boto3
 import os
 
