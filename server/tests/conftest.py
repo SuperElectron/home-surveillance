@@ -57,34 +57,6 @@ def mongo_server(docker: libdocker.APIClient) -> None:
         return
 
 
-# @pytest.fixture(scope="session", autouse=True)
-# def ant_server(docker: libdocker.APIClient) -> None:
-#     if USE_LOCAL_ANT is not False:
-#         host_config = docker.create_host_config(port_bindings = {5090:5090}) 
-#         container = docker.create_container(
-#             image=ANT_DOCKER_IMAGE,
-#             name=ANT_DOCKER_CONTAINER_NAME,
-#             detach=True,
-#             ports=[5090],
-#             host_config=host_config
-#         )
-
-#         docker.start(container=container["Id"])
-#         inspection = docker.inspect_container(container["Id"])
-#         host = inspection["NetworkSettings"]["IPAddress"]
-
-#         environ["ANT_HOST"] = host
-#         environ["ANT_PORT"] = "5090"
-
-
-#         yield container
-#         docker.kill(container["Id"])
-#         docker.remove_container(container["Id"])
-#     else: 
-#         yield
-#         return
-
-
 @pytest.fixture
 def app() -> FastAPI:
     from main import get_application

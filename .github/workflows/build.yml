@@ -36,11 +36,8 @@ jobs:
           flake8 server --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 server --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: set pythonpath
-        run: |
-          echo "PYTHONPATH=server" >> $GITHUB_ENV
       - name: Test with pytest
         run: |
-          pwd
-          ls -al server
-          pytest --fixtures tests --ignore tests/test_docker
+          echo "PYTHONPATH=$(pwd)/server" >> $GITHUB_ENV
+          echo $GITHUB_ENV
+          cd server && pytest --fixtures tests
