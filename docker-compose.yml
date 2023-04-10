@@ -134,9 +134,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  server:
-    container_name: server
-    build: server
+  backup:
+    container_name: backup
+    build: backup
     networks:
       cloud_manager:
         ipv4_address: 172.23.0.11

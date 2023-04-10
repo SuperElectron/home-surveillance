@@ -1,36 +1,45 @@
-import os
+import logging
 import sys
+from typing import Tuple
 
+from loguru import logger
+from starlette.config import Config
 
-def load_settings() -> None:
-    if not os.environ.get("DB_USER"):
-        check_settings("DB_USER", "root")
-    
-    if not os.environ.get("DB_PASSWORD"):
-        check_settings("DB_PASSWORD", "admin")
-    
-    if not os.environ.get("DB_HOST"):
-        check_settings("DB_HOST", "localhost")
-    
-    if not os.environ.get("DB_PORT"):
-        check_settings("DB_PORT", "27017")
+from app.core.logging import InterceptHandler
 
-    if not os.environ.get("DB_NAME"):
-        check_settings("DB_NAME", "backup_db")
+config = Config(".env")
 
-    if not os.environ.get("ACTOR_WAIT_TIME"):
-        check_settings("ACTOR_WAIT_TIME", 2.5)
-    
-    if not os.environ.get("ACTOR_WATCH_DIR"):
-        check_settings("ACTOR_WATCH_DIR", "/streams")
+# API Prefix
+API_PREFIX: str = config("API_PREFIX", default="/api/v1")
 
-    if not os.environ.get("S3_KEY_ID"):
-        sys.exit("S3_KEY_ID must be set, this cannot be given a default value due to security issues.")
+# API Version
+VERSION: str = config("VERSION", default="1.0.0")
 
-    if not os.environ.get("S3_SECRET_KEY"):
-        sys.exit("S3_SECRET_KEY must be set, this cannot be given a default value due to security issues.")
+# Application Settings
+DEBUG: bool = config("DEBUG", cast=bool, default=False)
+PROJECT_NAME: str = config("PROJECT_NAME", default="Media Server API")
 
+# Ant Server
+ANT_HOST: str = config("ANT_HOST", default="localhost")
+ANT_PORT: str = config("ANT_PORT", default="5080")
+ANT_REST_PATH: str = config("ANT_REST_PATH", default="WebRTCApp/rest/v2")
 
-def check_settings(var: str, val: str) -> None:
-    if not os.environ.get(var):
-        os.environ.update({var: val})
+# Database
+DB_USER: str = config("DB_USER", default="root")
+DB_PASSWORD: str = config("DB_PASSWORD", default="admin")
+DB_HOST: str = config("DB_HOST", default="localhost")
+DB_PORT: str = config("DB_PORT", default="27017")
+DB_NAME: str = config("DB_NAME", default="backup_db")
+
+# Logging Settings 
+
+LOGGING_LEVEL: int = logging.DEBUG if DEBUG else logging.INFO
+LOGGERS: Tuple[str, str] = ("uvicorn.asgi", "uvicorn.acces")
+
+logging.getLogger().handlers = [InterceptHandler()]
+
+for logger_name in LOGGERS:
+    logging_logger = logging.getLogger(logger_name)
+    logging_logger.handlers = [InterceptHandler(level=LOGGING_LEVEL)]
+
+logger.configure(handlers=[{"sink": sys.stderr, "level": LOGGING_LEVEL}])
