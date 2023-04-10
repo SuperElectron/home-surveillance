@@ -1,4 +1,6 @@
 
+## Run this script from the same directory
+
 # If running this script before logging into grafana, do not pass arguments
 ## example usage: ./grafana-setup.sh
 # If you have already logged in, then pass username & password
@@ -18,10 +20,10 @@ echo "Creating Ant Media Server Grafana Panel"
 curl -s "http://172.23.0.10:3000/api/dashboards/db" \
         -u "${USER}:${PASSWORD}" \
         -H "Content-Type: application/json" \
-        --data-binary "@/tmp/dashboard.json"
+        --data-binary "@dashboard.json"
 
 echo "Creating Elastich Search DataSource for Ant Media Server Grafana Panel"
 curl -s -X "POST" "http://172.23.0.10:3000/api/datasources" \
         -H "Content-Type: application/json" \
         -u "${USER}:${PASSWORD}" \
-        --data-binary "@/tmp/datasource.json"
+        --data-binary "@datasource.json"
