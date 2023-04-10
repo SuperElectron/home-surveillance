@@ -36,5 +36,7 @@ jobs:
           echo $Python3_ROOT_DIR
       - name: Test with pytest
         run: |
+          pwd
+          ls -al 
           pytest --fixtures tests
         working-directory: server
