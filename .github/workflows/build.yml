@@ -38,5 +38,6 @@ jobs:
           flake8 server --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
-          ls -al 
+          pwd
+          ls -al server
           pytest --fixtures server/tests --ignore server/tests/test_docker
