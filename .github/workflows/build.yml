@@ -41,5 +41,5 @@ jobs:
         run: |
           pwd
           ls -al 
-          pytest --fixtures tests
+          pytest
         working-directory: server
