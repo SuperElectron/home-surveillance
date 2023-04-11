@@ -28,15 +28,15 @@ services:
       - elasticsearch
       - mongo
 
-#  gstreamer:
-#    container_name: gstreamer
-#    restart: unless-stopped
-#    build: .docker/gstreamer
-#    networks:
-#      cloud_manager:
-#        ipv4_address: 172.23.0.3
-#    working_dir: /start
-#    command: bash -c "sleep infinity"
+  gstreamer:
+    container_name: gstreamer
+    restart: unless-stopped
+    build: .docker/gstreamer
+    networks:
+      cloud_manager:
+        ipv4_address: 172.23.0.3
+    working_dir: /start
+    command: bash -c "sleep infinity"
 
   mongo:
     container_name: mongo
